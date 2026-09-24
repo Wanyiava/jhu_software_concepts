@@ -5,11 +5,11 @@ from datetime import datetime
 import psycopg
 
 connection = psycopg.connect(
-    dbname="studentCourses",
-    user="liuwanyi",
-    password="",
-    host="localhost",
-    port="5432"
+    dbname=os.getenv("PGDATABASE", "test_db"),
+    user=os.getenv("PGUSER", "postgres"),
+    password=os.getenv("PGPASSWORD", "password"),
+    host=os.getenv("PGHOST", "127.0.0.1"),
+    port=os.getenv("PGPORT", "5432")
 )
 
 data_list = []
