@@ -54,7 +54,11 @@ def get_analysis_data():
             'q1': q1_val, 'q4': q4_val, 'q5': q5_val, 'q8': q8_val,
             'q9': q9_val, 'diff': diff_val, 'q10': q10_val, 'q11': q11_val
         }
+    except Exception as e:
+        print(f"Error in get_analysis_data: {e}")
+        raise e
     finally:
+        # 确保无论如何都会安全关闭 session，释放数据库连接
         session.close()
 
 
