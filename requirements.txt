@@ -11,3 +11,4 @@ reportlab
 # Scraping & Data processing (from Module 2)
 requests
 beautifulsoup4
+pytest
