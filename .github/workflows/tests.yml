@@ -48,4 +48,8 @@ jobs:
         PGHOST: 127.0.0.1
         PGPORT: 5432
       run: |
+        python -c "from src.models import Base, engine; Base.metadata.create_all(bind=engine)"
+        
+        if [ -f src/load_data.py ]; then python src/load_data.py; fi
+        
         python -m pytest
