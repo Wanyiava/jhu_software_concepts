@@ -1,12 +1,18 @@
+import os
 from sqlalchemy import create_engine, Column, Integer, Text, Float, Date
 from sqlalchemy.orm import declarative_base, sessionmaker
 
-DATABASE_URL = "postgresql://liuwanyi:@localhost:5432/studentCourses"
+DATABASE_URL = os.getenv(
+    "DATABASE_URL", 
+    "postgresql://postgres:password@127.0.0.1:5432/test_db"
+)
+
+if DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
 
 engine = create_engine(DATABASE_URL)
 
 SessionLocal = sessionmaker(bind=engine)
-
 
 Base = declarative_base()
 
