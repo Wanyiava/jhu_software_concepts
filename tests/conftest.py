@@ -1,5 +1,9 @@
 import os
-os.environ["DATABASE_URL"] = "postgresql://postgres:password@127.0.0.1:5432/test_db"
-os.environ["PGPASSWORD"] = "password"
-os.environ["PGUSER"] = "postgres"
-os.environ["PGHOST"] = "127.0.0.1"
+import pytest
+from src.models import Base, engine
+
+@pytest.fixture(scope="session", autouse=True)
+def setup_database():
+    # 测试开始前，在 Postgres 数据库中自动创建所有数据表（包括 applicants）
+    Base.metadata.create_all(bind=engine)
+    yield
