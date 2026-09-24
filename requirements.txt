@@ -1,0 +1,13 @@
+# Web Framework
+Flask
+
+# Database & ORM
+SQLAlchemy
+psycopg2-binary
+
+# PDF Generation (Part 11)
+reportlab
+
+# Scraping & Data processing (from Module 2)
+requests
+beautifulsoup4
