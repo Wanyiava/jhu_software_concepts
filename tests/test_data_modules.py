@@ -1,4 +1,7 @@
 import os
+os.environ.setdefault("DATABASE_URL", "postgresql://postgres:password@127.0.0.1:5432/test_db")
+os.environ.setdefault("PGPASSWORD", "password")
+import os
 import sys
 import pytest
 import runpy
