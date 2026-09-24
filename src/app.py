@@ -1,4 +1,8 @@
 import os
+os.environ.setdefault("DATABASE_URL", "postgresql://postgres:password@127.0.0.1:5432/test_db")
+os.environ.setdefault("PGPASSWORD", "password")
+os.environ.setdefault("PGUSER", "postgres")
+os.environ.setdefault("PGHOST", "127.0.0.1")
 import subprocess
 from flask import Flask, render_template, request, jsonify
 from sqlalchemy import select, func, and_, or_
@@ -69,11 +73,9 @@ def create_app(config=None):
     def pull_data():
         global scraping_process
         
-        # 如果后台已有任务在运行，返回 409 Busy JSON 响应（符合作业标准）
         if scraping_process is not None and scraping_process.poll() is None:
             return jsonify({"busy": True, "message": "A data pull process is already running."}), 409
 
-        # 启动后台爬虫进程
         scraping_process = subprocess.Popen(['python3', 'src/scrape.py'])
         return jsonify({"ok": True, "message": "Data pull started successfully!"}), 200
 
@@ -81,7 +83,6 @@ def create_app(config=None):
     def update_analysis():
         global scraping_process
         
-        # 如果爬虫运行中则阻止/提示 409 Busy
         if scraping_process is not None and scraping_process.poll() is None:
             return jsonify({"busy": True, "message": "A background data pull is currently retrieving new entries."}), 409
 
