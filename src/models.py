@@ -2,11 +2,15 @@ import os
 from sqlalchemy import create_engine, Column, Integer, Text, Float, Date
 from sqlalchemy.orm import declarative_base, sessionmaker
 
-DATABASE_URL = os.getenv(
-    "DATABASE_URL", 
-    "postgresql://postgres:password@127.0.0.1:5432/test_db"
-)
+DATABASE_URL = os.getenv("DATABASE_URL")
 
+if not DATABASE_URL or "@" not in DATABASE_URL:
+    user = os.getenv("PGUSER", "postgres")
+    password = os.getenv("PGPASSWORD", "password")
+    host = os.getenv("PGHOST", "127.0.0.1")
+    port = os.getenv("PGPORT", "5432")
+    db = os.getenv("PGDATABASE", "test_db")
+    DATABASE_URL = f"postgresql://{user}:{password}@{host}:{port}/{db}"
 if DATABASE_URL.startswith("postgres://"):
     DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
 
