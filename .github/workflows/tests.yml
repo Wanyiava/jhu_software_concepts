@@ -50,4 +50,4 @@ jobs:
       run: |
         python -c "from src.models import Base, engine; Base.metadata.create_all(bind=engine)"
         if [ -f src/load_data.py ]; then python src/load_data.py; fi
-        python -m pytest
+        python -m pytest -v
