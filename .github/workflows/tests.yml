@@ -47,4 +47,4 @@ jobs:
         PGHOST: 127.0.0.1
         PGPORT: 5432
       run: |
-        python3 -m pytest
+        python -m pytest
