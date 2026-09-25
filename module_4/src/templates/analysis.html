@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Grad Café · Analysis</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<main class="container">
+  <header><p class="eyebrow">GRAD CAFÉ / ADMISSIONS EXPLORER</p><h1>Analysis</h1>
+  <p class="description">Explore reported graduate admissions outcomes. Pull new records, then update the analysis to refresh these results.</p></header>
+  <section class="toolbar" aria-label="Data controls">
+    <form action="{{ url_for('pull_data') }}" method="post"><button type="submit" data-testid="pull-data-btn">Pull Data</button></form>
+    <form action="{{ url_for('update_analysis') }}" method="post"><button type="submit" data-testid="update-analysis-btn" class="secondary">Update Analysis</button></form>
+    <p id="status" role="status" aria-live="polite">Ready</p>
+  </section>
+  {% macro number(value) %}{{ '%.2f'|format(value) if value is not none else 'N/A' }}{% endmacro %}
+  <div class="analysis-grid">
+  <section class="card" data-question="1"><h2>01 / Fall 2026 applicants</h2><p data-testid="analysis-answer">Answer: <span class="value">{{ results.q1 }}</span></p></section>
+  <section class="card" data-question="2"><h2>02 / International applicants</h2><p data-testid="analysis-answer">Answer: <span class="value" data-testid="percentage">{{ '%.2f'|format(results.q2) }}%</span></p><small>Among records with reported citizenship.</small></section>
+  <section class="card" data-question="3"><h2>03 / Average reported scores</h2><p data-testid="analysis-answer">Answer: GPA {{ number(results.q3.gpa) }} · GRE Q {{ number(results.q3.gre) }} · GRE V {{ number(results.q3.gre_v) }} · GRE AW {{ number(results.q3.gre_aw) }}</p></section>
+  <section class="card" data-question="4"><h2>04 / American applicants' GPA</h2><p data-testid="analysis-answer">Answer: <span class="value">{{ number(results.q4) }}</span></p><small>Fall 2026.</small></section>
+  <section class="card" data-question="5"><h2>05 / Fall 2025 acceptance rate</h2><p data-testid="analysis-answer">Answer: <span class="value" data-testid="percentage">{{ '%.2f'|format(results.q5) }}%</span></p></section>
+  <section class="card" data-question="6"><h2>06 / Accepted applicants' GPA</h2><p data-testid="analysis-answer">Answer: <span class="value">{{ number(results.q6) }}</span></p><small>Fall 2026.</small></section>
+  <section class="card" data-question="7"><h2>07 / Johns Hopkins CS master's applicants</h2><p data-testid="analysis-answer">Answer: <span class="value">{{ results.q7 }}</span></p></section>
+  <section class="card" data-question="8"><h2>08 / CS PhD acceptances · original fields</h2><p data-testid="analysis-answer">Answer: <span class="value">{{ results.q8 }}</span></p><small>Fall 2026, Georgetown, MIT, Stanford, or Carnegie Mellon.</small></section>
+  <section class="card" data-question="9"><h2>09 / CS PhD acceptances · enriched fields</h2><p data-testid="analysis-answer">Answer: <span class="value">{{ results.q9 }}</span> · Difference: {{ '%+d'|format(results.diff) }}</p><small>Same cohort, using supplied LLM-generated fields.</small></section>
+  <section class="card" data-question="10"><h2>10 / Average GPA by degree</h2><p data-testid="analysis-answer">Answer: {% for degree, gpa in results.q10.items() %}{{ degree }}: {{ number(gpa) }}{% if not loop.last %} · {% endif %}{% else %}No reported GPA{% endfor %}</p></section>
+  <section class="card" data-question="11"><h2>11 / International acceptance rate</h2><p data-testid="analysis-answer">Answer: <span class="value" data-testid="percentage">{{ '%.2f'|format(results.q11) }}%</span></p><small>Spring 2027.</small></section>
+  </div>
+  <footer>Self-reported survey data. Missing scores are excluded from averages; empty rates display 0.00 percent.</footer>
+</main>
+<script>
+document.querySelectorAll('.toolbar form').forEach(form => {
+  form.addEventListener('submit', async event => {
+    event.preventDefault();
+    const buttons = document.querySelectorAll('.toolbar button');
+    const status = document.getElementById('status');
+    buttons.forEach(button => { button.disabled = true; });
+    status.textContent = 'Working…';
+    try {
+      const response = await fetch(form.action, {method: 'POST'});
+      const data = await response.json();
+      if (data.busy) { status.textContent = 'A request is in progress. Please try again when it finishes.'; }
+      else if (!response.ok) { status.textContent = data.error || 'The request failed.'; }
+      else if (form.action.endsWith('/update-analysis')) { window.location.reload(); }
+      else { status.textContent = `Added ${data.inserted} new records. Select Update Analysis to refresh the results.`; }
+    } catch (error) { status.textContent = 'Unable to reach the server. Please try again.'; }
+    finally { buttons.forEach(button => { button.disabled = false; }); }
+  });
+});
+</script>
+</body>
+</html>
