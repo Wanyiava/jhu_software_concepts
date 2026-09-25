@@ -36,7 +36,7 @@ jobs:
         with:
           python-version: '3.13'
           cache: pip
-          cache-dependency-path: module_4/requirements.txt
+          cache-dependency-path: requirements.txt
       - name: Install dependencies
         run: python -m pip install -r requirements.txt
       - name: Run all marked tests with 100% coverage
@@ -52,6 +52,6 @@ jobs:
         with:
           name: module-4-evidence
           path: |
-            module_4/coverage_summary.txt
-            module_4/coverage.xml
-            module_4/docs/_build/html
+            coverage_summary.txt
+            coverage.xml
+            docs/_build/html
