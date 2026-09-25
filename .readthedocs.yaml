@@ -6,9 +6,8 @@ build:
     python: "3.11"
 
 sphinx:
-  configuration: module_4/docs/conf.py
+  configuration: docs/conf.py
 
 python:
   install:
-    - method: pip
-      path: module_4
+    - requirements: module_4/requirements.txt
