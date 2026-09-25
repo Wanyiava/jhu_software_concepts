@@ -4,3 +4,7 @@
 *.gguf
 *.gguf
 *.gguf
+*.zip
+*.gguf
+__pycache__/
+.DS_Store
