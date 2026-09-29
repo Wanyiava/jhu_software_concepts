@@ -1,0 +1,12 @@
+# Environment Variables (Secrets)
+.env
+
+# Virtual Environments
+venv/
+.venv/
+
+# Python Cache & Testing
+__pycache__/
+*.pyc
+.pytest_cache/
+.coverage

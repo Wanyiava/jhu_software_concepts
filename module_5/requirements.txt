@@ -1,0 +1,10 @@
+flask
+sqlalchemy
+psycopg2-binary
+python-dotenv
+requests
+beautifulsoup4
+pylint
+pydeps
+pytest
+pytest-cov
