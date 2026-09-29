@@ -4,7 +4,7 @@ Flask admissions analytics with a real PostgreSQL test suite and Sphinx document
 
 **Repository SSH URL:** `git@github.com:Wanyiava/jhu_software_concepts.git`
 
-**Documentation:** [built HTML](docs/_build/html/index.html) · [source](docs/index.rst). A verified hosted URL must be added after Read the Docs publishes this revision.
+**Documentation:** https://jhu-software-concepts-wanyiava.readthedocs.io/en/latest/
 
 ## Setup
 
